@@ -15,10 +15,8 @@ Pod::Spec.new do |s|
   s.source_files   = 'ios/RNTwilioVoice/*.{h,m}'
   s.source         = { git: 'https://github.com/hoxfon/react-native-twilio-programmable-voice', tag: s.version }
 
-  s.dependency 'React-Core'
-  s.dependency 'TwilioVoice', '~> 5.2.0'
-  s.xcconfig = { 'FRAMEWORK_SEARCH_PATHS' => '${PODS_ROOT}/TwilioVoice/Build/iOS' }
-  s.frameworks   = 'TwilioVoice'
+  s.dependency 'React'
+  s.dependency 'TwilioVoice', '~> 6.4'
   s.preserve_paths = 'LICENSE', 'README.md', 'package.json', 'index.js'
 
 end
