@@ -4,20 +4,10 @@ This is a react-native wrapper around [Twilio Programmable Voice SDK](https://ww
 
 This module is not affiliated with nor officially maintained by Twilio. It is maintained by open source contributors working during their nights and weekends.
 
-Tested with:
+Master branch has been tested on React Native 0.69.3
 
-- react-native 0.62.2
-- Android 11
-- iOS 14
-
-## Roadmap
-
-### Project 1
-
-The most updated branch is [feat/twilio-android-sdk-5](https://github.com/hoxfon/react-native-twilio-programmable-voice/tree/feat/twilio-android-sdk-5) which is aligned with:
-
-- Android 5.4.2
-- iOS 5.2.0
+- Android 5.7.2
+- iOS 6.4.3
 
 It contains breaking changes from `react-native-twilio-programmable-voice` v4, and it will be released as v5.
 
@@ -25,10 +15,10 @@ You can install it with:
 
 ```bash
 # Yarn
-yarn add https://github.com/hoxfon/react-native-twilio-programmable-voice#feat/twilio-android-sdk-5
+yarn add https://github.com/vidyalai/react-native-twilio-programmable-voice
 
 # NPM
-npm install git+https://github.com/hoxfon/react-native-twilio-programmable-voice#feat/twilio-android-sdk-5
+npm install git+https://github.com/vidyalai/react-native-twilio-programmable-voice
 ```
 
 I am currently updating the library to catchup with all changes published on the latest Android and iOS Twilio Voice SDK:
