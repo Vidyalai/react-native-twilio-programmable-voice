@@ -930,6 +930,17 @@ public class TwilioVoiceModule extends ReactContextBaseJavaModule implements Act
         audioSwitch.selectDevice(selected);
     }
 
+    // https://github.com/software-mansion/react-native-reanimated/issues/2297
+    @ReactMethod
+    public void addListener(String eventName) {
+        // Keep: Required for RN built in Event Emitter Calls.
+    }
+
+    @ReactMethod
+    public void removeListeners(Integer count) {
+        // Keep: Required for RN built in Event Emitter Calls.
+    }
+
     private void startAudioSwitch() {
         audioSwitch.start((devices, device) -> {
             selectedAudioDevice = device;
