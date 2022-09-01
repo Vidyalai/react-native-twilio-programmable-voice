@@ -13,7 +13,7 @@ Pod::Spec.new do |s|
   s.requires_arc   = true
 
   s.source_files   = 'ios/RNTwilioVoice/*.{h,m}'
-  s.source         = { git: 'https://github.com/hoxfon/react-native-twilio-programmable-voice', tag: s.version }
+  s.source         = { git: 'https://github.com/vidyalai/react-native-twilio-programmable-voice', tag: s.version }
 
   s.dependency 'React'
   s.dependency 'TwilioVoice', '~> 6.4'
