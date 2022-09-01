@@ -145,7 +145,7 @@ RCT_EXPORT_METHOD(sendDigits: (NSString *)digits) {
 RCT_EXPORT_METHOD(unregister) {
   NSLog(@"unregister");
   NSString *accessToken = [self fetchAccessToken];
-  NSString *cachedDeviceToken = [[NSUserDefaults standardUserDefaults] objectForKey:kCachedDeviceToken];
+  NSData *cachedDeviceToken = [[NSUserDefaults standardUserDefaults] objectForKey:kCachedDeviceToken];
   if ([cachedDeviceToken length] > 0) {
       [TwilioVoiceSDK unregisterWithAccessToken:accessToken
                                  deviceToken:cachedDeviceToken
@@ -227,15 +227,15 @@ RCT_REMAP_METHOD(getCallInvite,
   NSLog(@"pushRegistry:didUpdatePushCredentials:forType");
 
   if ([type isEqualToString:PKPushTypeVoIP]) {
-    const unsigned *tokenBytes = [credentials.token bytes];
-    NSString *deviceTokenString = [NSString stringWithFormat:@"<%08x %08x %08x %08x %08x %08x %08x %08x>",
-                                                        ntohl(tokenBytes[0]), ntohl(tokenBytes[1]), ntohl(tokenBytes[2]),
-                                                        ntohl(tokenBytes[3]), ntohl(tokenBytes[4]), ntohl(tokenBytes[5]),
-                                                        ntohl(tokenBytes[6]), ntohl(tokenBytes[7])];
+    const char *tokenBytes = [credentials.token bytes];
+    NSMutableString *deviceTokenString = [NSMutableString string];
+    for (NSUInteger i = 0; i < [credentials.token length]; ++i) {
+        [deviceTokenString appendFormat:@"%02.2hhx", tokenBytes[i]];
+    }
     NSString *accessToken = [self fetchAccessToken];
-    NSString *cachedDeviceToken = [[NSUserDefaults standardUserDefaults] objectForKey:kCachedDeviceToken];
-    if (![cachedDeviceToken isEqualToString:deviceTokenString]) {
-        cachedDeviceToken = deviceTokenString;
+    NSData *cachedDeviceToken = [[NSUserDefaults standardUserDefaults] objectForKey:kCachedDeviceToken];
+    if (![cachedDeviceToken isEqualToData:credentials.token]) {
+        cachedDeviceToken = credentials.token;
 
         /*
          * Perform registration if a new device token is detected.
@@ -269,8 +269,7 @@ RCT_REMAP_METHOD(getCallInvite,
 
   if ([type isEqualToString:PKPushTypeVoIP]) {
     NSString *accessToken = [self fetchAccessToken];
-
-    NSString *cachedDeviceToken = [[NSUserDefaults standardUserDefaults] objectForKey:kCachedDeviceToken];
+    NSData *cachedDeviceToken = [[NSUserDefaults standardUserDefaults] objectForKey:kCachedDeviceToken];
     if ([cachedDeviceToken length] > 0) {
         [TwilioVoiceSDK unregisterWithAccessToken:accessToken
                                                 deviceToken:cachedDeviceToken
@@ -622,15 +621,18 @@ withCompletionHandler:(void (^)(void))completion {
 
   [self.callKitProvider reportOutgoingCallWithUUID:action.callUUID startedConnectingAtDate:[NSDate date]];
 
-  __weak typeof(self) weakSelf = self;
+  // __weak typeof(self) weakSelf = self;
   [self performVoiceCallWithUUID:action.callUUID client:nil completion:^(BOOL success) {
-    __strong typeof(self) strongSelf = weakSelf;
+//    __strong typeof(self) strongSelf = weakSelf;
     if (success) {
-      [strongSelf.callKitProvider reportOutgoingCallWithUUID:action.callUUID connectedAtDate:[NSDate date]];
-      [action fulfill];
+      NSLog(@"performVoiceCallWithUUID successful");
+      // [strongSelf.callKitProvider reportOutgoingCallWithUUID:action.callUUID connectedAtDate:[NSDate date]];
+      // [action fulfill];
     } else {
-      [action fail];
+      // [action fail];
+      NSLog(@"performVoiceCallWithUUID failed");
     }
+    [action fulfill];
   }];
 }
 
