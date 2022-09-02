@@ -4,7 +4,9 @@
 Master branch has been tested on React Native 0.69.3 (only outgoing calls), and RNTwiloVoice version has been updated to 6.0.0
 
 - Android 6.1.2
-- # iOS 6.4.3
+- iOS 6.4.3
+
+=========================
 
 This is a react-native wrapper around [Twilio Programmable Voice SDK](https://www.twilio.com/voice), which allows your react-native app to make and receive calls.
 
