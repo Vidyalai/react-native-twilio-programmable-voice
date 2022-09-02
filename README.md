@@ -1,13 +1,14 @@
 # react-native-twilio-programmable-voice
 
+=========================
+Master branch has been tested on React Native 0.69.3 (only outgoing calls), and RNTwiloVoice version has been updated to 6.0.0
+
+- Android 6.1.2
+- # iOS 6.4.3
+
 This is a react-native wrapper around [Twilio Programmable Voice SDK](https://www.twilio.com/voice), which allows your react-native app to make and receive calls.
 
 This module is not affiliated with nor officially maintained by Twilio. It is maintained by open source contributors working during their nights and weekends.
-
-Master branch has been tested on React Native 0.69.3 (only outgoing calls)
-
-- Android 5.7.2
-- iOS 6.4.3
 
 It contains breaking changes from `react-native-twilio-programmable-voice` v4, and it will be released as v5.
 
