@@ -23,6 +23,8 @@ NSString * const kCallerNameCustomParameter = @"CallerName";
 @property (nonatomic, strong) CXProvider *callKitProvider;
 @property (nonatomic, strong) CXCallController *callKitCallController;
 @property (nonatomic, assign) BOOL userInitiatedDisconnect;
+@property (nonatomic, assign) BOOL playCustomRingback;
+@property (nonatomic, strong) AVAudioPlayer *ringtonePlayer;
 
 @end
 
@@ -89,6 +91,8 @@ RCT_EXPORT_METHOD(configureCallKit: (NSDictionary *)params) {
     if (_settings[@"ringtoneSound"]) {
       configuration.ringtoneSound = _settings[@"ringtoneSound"];
     }
+
+    self.playCustomRingback = YES;
 
     _callKitProvider = [[CXProvider alloc] initWithConfiguration:configuration];
     [_callKitProvider setDelegate:self queue:nil];
@@ -816,6 +820,48 @@ withCompletionHandler:(void (^)(void))completion {
     NSLog(@"handleAppTerminateNotification disconnecting an active call");
     [self.activeCall disconnect];
   }
+}
+
+#pragma mark - Ringtone
+
+- (void)playRingback {
+    NSString *ringtonePath = [[NSBundle mainBundle] pathForResource:@"ringtone" ofType:@"wav"];
+    if ([ringtonePath length] <= 0) {
+        NSLog(@"Can't find sound file");
+        return;
+    }
+    
+    NSError *error;
+    self.ringtonePlayer = [[AVAudioPlayer alloc] initWithContentsOfURL:[NSURL URLWithString:ringtonePath] error:&error];
+    if (error != nil) {
+        NSLog(@"Failed to initialize audio player: %@", error);
+    } else {
+        self.ringtonePlayer.delegate = self;
+        self.ringtonePlayer.numberOfLoops = -1;
+        
+        self.ringtonePlayer.volume = 1.0f;
+        [self.ringtonePlayer play];
+    }
+}
+
+- (void)stopRingback {
+    if (!self.ringtonePlayer.isPlaying) {
+        return;
+    }
+    
+    [self.ringtonePlayer stop];
+}
+
+- (void)audioPlayerDidFinishPlaying:(AVAudioPlayer *)player successfully:(BOOL)flag {
+    if (flag) {
+        NSLog(@"Audio player finished playing successfully");
+    } else {
+        NSLog(@"Audio player finished playing with some error");
+    }
+}
+
+- (void)audioPlayerDecodeErrorDidOccur:(AVAudioPlayer *)player error:(NSError *)error {
+    NSLog(@"Decode error occurred: %@", error);
 }
 
 @end
