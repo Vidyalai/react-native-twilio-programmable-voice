@@ -277,6 +277,7 @@ public class TwilioVoiceModule extends ReactContextBaseJavaModule implements Act
                 if (BuildConfig.DEBUG) {
                     Log.d(TAG, "Call.Listener().onRinging(). Call state: " + call.getState() + ". Call: "+ call.toString());
                 }
+                SoundPoolManager.getInstance(getReactApplicationContext()).playRinging();
                 WritableMap params = Arguments.createMap();
                 if (call != null) {
                     params.putString(Constants.CALL_SID,  call.getSid());
@@ -291,6 +292,7 @@ public class TwilioVoiceModule extends ReactContextBaseJavaModule implements Act
                     Log.d(TAG, "Call.Listener().onConnected(). Call state: " + call.getState());
                 }
                 audioSwitch.activate();
+                SoundPoolManager.getInstance(getReactApplicationContext()).stopRinging();
                 proximityManager.startProximitySensor();
                 headsetManager.startWiredHeadsetEvent(getReactApplicationContext());
 
@@ -350,6 +352,8 @@ public class TwilioVoiceModule extends ReactContextBaseJavaModule implements Act
                     Log.d(TAG, "Call.Listener().onDisconnected(). Call state: " + call.getState());
                 }
                 audioSwitch.deactivate();
+                SoundPoolManager.getInstance(getReactApplicationContext()).stopRinging();
+                SoundPoolManager.getInstance(getReactApplicationContext()).playDisconnect();
                 proximityManager.stopProximitySensor();
                 headsetManager.stopWiredHeadsetEvent(getReactApplicationContext());
 
@@ -381,6 +385,7 @@ public class TwilioVoiceModule extends ReactContextBaseJavaModule implements Act
                     Log.d(TAG, "Call.Listener().onConnectFailure(). Call state: " + call.getState());
                 }
                 audioSwitch.deactivate();
+                SoundPoolManager.getInstance(getReactApplicationContext()).stopRinging();
                 proximityManager.stopProximitySensor();
 
                 Log.e(TAG, String.format("CallListener onConnectFailure error: %d, %s",
